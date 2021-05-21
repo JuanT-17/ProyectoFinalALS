@@ -1,0 +1,125 @@
+{% extends "admin/cabecera.html" %}
+{% block content %}
+<style>
+    input {
+        width: 100%;
+        background-color: #ED874C;
+        color:white;
+        height: 25px;
+        font-size: 22px;
+    }
+
+    select {
+        width: 100%;
+        background-color: #ED874C;
+        color:white;
+        font-size: 22px;
+    }
+    label {
+        color: white;
+        font-size: 22px;
+    }
+
+    form {
+        background-color: #A14813;
+    }
+
+</style>
+<script>
+    function hideError()
+    {
+        document.getElementById( "dvError" ).style.display = "none";
+    }
+
+    function showError(msg)
+    {
+        var dvAnswer = document.getElementById("dvError");
+
+        dvAnswer.innerHTML = "ERROR: " + msg;
+        dvAnswer.style.display = "block";
+        dvAnswer.style.backgroundColor = "#FF1900";
+        dvAnswer.style.color = "white";
+        dvAnswer.style.fontSize = "14px";
+    }
+
+    function chk() {
+        var toret = true;
+        var form = document.getElementById("frmInput");
+
+        hideError();
+
+        //Preparar valores
+        var nombre = form["edNombre"].value.trim().toLowerCase();
+        var eslora = form["edEslora"].value;
+        var tipo_embarcacion = form["edTipoEmbarcacion"].value;
+        var num_pasajeros = form["edNumPasajeros"].value;
+
+        //Expresiones regulares
+        var expAlfabeticos = /^[a-z ]{2,50}$/;
+        var expNum = /^[0-9]{1,4}$/;
+
+        //Comprobar todos los valores
+        if ( nombre.length < 2 || nombre.length > 50 || !expAlfabeticos.test(nombre.toLowerCase()) ) {
+            toret = false;
+            showError( "El nombre debe ser de entre 2 y 50 letras y solo se permiten caracteres alfabeticos.");
+        }
+        if ( eslora < 10 || eslora > 500 || !expNum.test(eslora) ) {
+            toret = false;
+            showError( "La eslora debe estar en Metros y ser de una distancia de uno a 500");
+        }
+        if ( tipo_embarcacion === "Velero" || tipo_embarcacion === "Crucero" || tipo_embarcacion === "Barco pesquero"
+            || tipo_embarcacion === "Barco mercancias"){
+            toret = false;
+            showError("El tipo de embarcacion debe corresponderse a alguna de las opciones dadas");
+        }
+        if ( num_pasajeros < 2 || num_pasajeros > 1000 || !expNum.test(num_pasajeros) ) {
+          toret = false;
+          showError("El numero de pasajeros debe representar el maximo del barco y ser un numero entre el 2 y el 1000");
+        }
+
+        return toret;
+    }
+</script>
+
+<form id="frmInput"
+      onsubmit="return chk();"
+      action="/admin/editarBarco"
+      method="post">
+    <h1>Insertar informacion del nuevo barco</h1>
+    <p>
+        <label for="edNombre">Nombre: </label>
+        <input type="text" id="edNombre" name="edNombre" value="{{barco.nombre}}" required/>
+    </p>
+    <p>
+      <label for="edEslora">Eslora en metros: </label>
+      <input type="number" id="edEslora" name="edEslora" step="1" min="10" max="500" value="{{barco.eslora}}" required/>
+    </p>
+    <p>
+        <label for="edTipoEmbarcacion">Tipo de embarcacion: </label>
+        <select id="edTipoEmbarcacion" name="edTipoEmbarcacion" >
+          <option selected="true" value="{{barco.tipo_embarcacion}}">{{barco.tipo_embarcacion.capitalize()}}</option>
+            <option value="velero">Velero</option>
+            <option value="crucero">Crucero</option>
+            <option value="barco pesquero">Barco pesquero</option>
+            <option value="barco mercancias">Barco mercancias</option>
+        </select>
+    </p>
+    <p>
+        <label for="edNumPasajeros">Pasajeros maximos: </label>
+        <input type="number" id="edNumPasajeros" name="edNumPasajeros" step="1" min="2" max="1000" value="{{barco.num_pasajeros}}" required/>
+    </p>
+  <p>
+    <input type="text" id="edIdBarco" name="edIdBarco" value="{{barco.key.urlsafe()}}" hidden/>
+  </p>
+    <p style="height: 100%;width: 100%">
+        <button style="width: 72%; font-size: 22px" type="submit">Guardar</button>
+        <a href="/admin/verBarcos">
+            <input type="button" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
+                   value="Cancelar"/>
+        </a>
+    </p>
+</form>
+<div id="dvError">
+
+</div>
+{% endblock %}

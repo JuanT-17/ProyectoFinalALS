@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: #539494;
+            font-family: "Arial", "Helvetica", sans-serif;
+            font-size: 10pt
+        }
+
+        text {
+            color: white;
+        }
+
+        table {
+            background-color: #A14813;
+            text-decoration-color: white;
+            -moz-text-size-adjust: auto;
+            width: 100%;
+            height: 100%;
+        }
+
+        ul {
+            width: 45%;
+            overflow: hidden;
+            height: 52px;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-transform: uppercase;
+        }
+
+        li {
+            float: left;
+        }
+
+        li button {
+            width: 100%;
+            height: 80%;
+            alignment: center;
+            vertical-align: center;
+            background-color: #ED874C;
+            color:white;
+            font-size: 35px;
+        }
+
+        button {
+            background-color: #DB5000;
+            color: white;
+        }
+
+        th {
+            background-color: #A14813;
+            color:white;
+            font-size:18px;
+
+        }
+
+        tr {
+            background-color: #ED874C;
+            color:white;
+            font-size:18px;
+        }
+
+        td{
+            background-color: #ED874C;
+            color:white;
+            font-size:16px;
+        }
+
+        h1 {
+            color: white;
+        }
+
+        h2 {
+            color: white;
+        }
+
+        href {
+            color: #94E0E0;
+        }
+
+        .header {
+            overflow: auto;
+            width: 100%;
+            background-color: #A14813;
+        }
+
+    </style>
+    <meta charset="UTF-8">
+    <title>ALS_Final</title>
+</head>
+<body>
+<header class="header">
+    <nav>
+        <ul>
+            <li>
+                <a href="/verCoches">
+                  <button>COCHES</button>
+                </a>
+            </li>
+            <li>
+                <a href="/verBarcos">
+                  <button>BARCOS</button>
+                </a>
+            </li>
+        </ul>
+    </nav><!-- / nav -->
+</header>
+
+<div id="contenido">
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>

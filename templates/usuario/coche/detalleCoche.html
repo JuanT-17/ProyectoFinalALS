@@ -1,0 +1,129 @@
+{% extends "usuario/cabecera.html" %}
+{% block content %}
+<div id="Listado Coches">
+    <p>
+        {% if coche.nombre != ERROR %}
+    <h2>Datos del coche</h2>
+    <table>
+        <th>Nombre</th>
+        <th>Marca</th>
+        <th>Num Puertas</th>
+        <th>Caballos</th>
+        <th>Tipo combustible</th>
+        <th>Num Asientos</th>
+        <tr>
+            <td>
+                {{coche.nombre.capitalize()}}
+            </td>
+
+            <td>
+                {{coche.marca.capitalize()}}
+            </td>
+            <td style="text-align: center">
+                {{coche.num_puertas}}
+            </td>
+            <td style="text-align: center">
+                {{coche.caballos}}
+            </td>
+            <td>
+                {{coche.combustible.capitalize()}}
+            </td>
+            <td style="text-align: center">
+                {{coche.num_asientos}}
+            </td>
+        </tr>
+    </table>
+    <div id="comentarios-container">
+        <p></p>
+        <p></p>
+        <p></p>
+        <form id="frmNuevoComentario" onsubmit="return chk()" action="/comentarCoches" method="POST">
+            <p>
+            <label for="edComentario" style="color: white; font-size: 30px; width: 20%"> Comentario </label>
+            </p>
+            <p>
+            <input type="text" id="edComentario" name="edComentario" size="120"
+                   style="border:none;background-color: #A14813;color: white;font-size: 18px; width: 60%" required/>
+            </p>
+            <p>
+            <label for="edPuntuacion" style="color: white; font-size: 15px; width: 20%"> Nota del 1 al 10 </label>
+            <input type="number" id="edPuntuacion" name="edPuntuacion"
+                   style="border:none;background-color: #A14813;color: white;font-size: 18px; width: 60%"
+                   step="1" min="1" max="10" required/>
+            </p>
+            <input type="text" id="edIdCoche" name="edIdCoche" value="{{coche.key.urlsafe()}}" hidden/>
+            <input type="submit" style="background-color: #DB5000;color: white;width: 20%; height: 100%;" value="Publicar!!"/>
+        </form>
+        <div id="dvError"></div>
+        {% if lista_comentarios.count() > 0 %}
+        <p></p>
+        <p></p>
+        <p></p>
+        <h3 style="color: white"> Listado Comentarios </h3>
+        <table>
+            <th>Nombre Usuario</th>
+            <th>Comentario</th>
+            <th>Fecha</th>
+            <th>Puntuacion</th>
+            {% for comentario in lista_comentarios %}
+            <tr>
+                <td>{{comentario.user_name}}</td>
+                <td>{{comentario.contenido}}</td>
+                <td>{{comentario.fecha}}</td>
+                <td>{{comentario.puntuacion}}</td>
+                {% if comentario.user_name == user_name %}
+                <td>
+                    <a href="eliminarComentarioCoche?id_comentario={{comentario.key.urlsafe()}}">
+                        <button type="submit" style="width:100%;">Eliminar</button>
+                    </a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+    {% else %}
+    <h1>ERROR INESPERADO</h1>
+    <h2>Disculpe las molestias</h2>
+    {% endif %}
+    </p>
+    <script>
+        function hideError() {
+            document.getElementById("dvError").style.display = "none";
+        }
+
+        function showError(msg) {
+            var dvAnswer = document.getElementById("dvError");
+
+            dvAnswer.innerHTML = "ERROR: " + msg;
+            dvAnswer.style.display = "block";
+            dvAnswer.style.backgroundColor = "#FF1900";
+            dvAnswer.style.color = "white";
+            dvAnswer.style.fontSize = "14px";
+        }
+
+        function chk() {
+            var toret = true;
+            var form = document.getElementById("frmNuevoComentario");
+
+            hideError();
+
+            //Preparar valores
+            var contenido = form["edComentario"].value.trim().toLowerCase();
+            var puntuacion = form["edPuntuacion"].value;
+
+            if (contenido.length < 2 || contenido.length > 120) {
+                toret=false;
+                showError("El comentario debe estar entre los 2 y los 120 caracteres.");
+            }
+            if (puntuacion < 1 || puntuacion > 10 ){
+                toret = false;
+                showError("La puntuacion es obligatoria y debe ser un numero del 1 al 10");
+            }
+
+            return toret;
+        }
+    </script>
+</div>
+{% endblock %}

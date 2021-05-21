@@ -1,0 +1,40 @@
+{% extends "admin/cabecera.html" %}
+{% block content %}
+<div id="seguro">
+    <form id="frmEliminarBarco" action="/admin/eliminarBarco" method="POST">
+        <p style="color: white; font-size: 30px">
+            ¿Está seguro de querer borrar el siguiente barco?
+            Recuerde que borrará todos los comentarios asociados al mismo.
+        </p>
+        <table>
+            <th>Nombre</th>
+            <th>Eslora en metros</th>
+            <th>Tipo de embarcacion</th>
+            <th>Pasajeros maximos</th>
+            <tr>
+                <td>
+                    {{barco.nombre.capitalize()}}
+                </td>
+                <td style="text-align: center">
+                    {{barco.eslora}}
+                </td>
+                <td>
+                    {{barco.tipo_embarcacion.capitalize()}}
+                </td>
+                <td style="text-align: center">
+                    {{barco.num_pasajeros}}
+                </td>
+            </tr>
+        </table>
+        <input type="text" id="edIdBarco" name="edIdBarco" value="{{barco.key.urlsafe()}}" hidden/>
+        <p></p>
+        <p></p>
+        <input type="submit" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
+               value="Por supuesto!!"/>
+        <a href="/admin/detalleBarco?id_barco={{barco.key.urlsafe()}}">
+            <input type="button" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
+                   value="Cancelar"/>
+        </a>
+    </form>
+</div>
+{% endblock %}

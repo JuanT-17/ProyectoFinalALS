@@ -1,0 +1,49 @@
+{% extends "admin/cabecera.html" %}
+{% block content %}
+<div id="seguro">
+    <form id="frmEliminarCoche" action="/admin/eliminarCoche" method="POST">
+        <p style="color: white; font-size: 30px">
+            ¿Está seguro de querer borrar el siguiente coche?
+            Recuerde que borrará todos los comentarios asociados al mismo.
+        </p>
+        <table>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Num Puertas</th>
+            <th>Caballos</th>
+            <th>Tipo combustible</th>
+            <th>Num Asientos</th>
+            <tr>
+                <td>
+                    {{coche.nombre.capitalize()}}
+                </td>
+
+                <td>
+                    {{coche.marca.capitalize()}}
+                </td>
+                <td style="text-align: center">
+                    {{coche.num_puertas}}
+                </td>
+                <td style="text-align: center">
+                    {{coche.caballos}}
+                </td>
+                <td>
+                    {{coche.combustible.capitalize()}}
+                </td>
+                <td style="text-align: center">
+                    {{coche.num_asientos}}
+                </td>
+            </tr>
+        </table>
+        <input type="text" id="edIdCoche" name="edIdCoche" value="{{coche.key.urlsafe()}}" hidden/>
+        <p></p>
+        <p></p>
+        <input type="submit" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
+               value="Por supuesto!!"/>
+        <a href="/admin/detalleCoche?id_coche={{coche.key.urlsafe()}}">
+            <input type="button" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
+                   value="Cancelar"/>
+        </a>
+    </form>
+</div>
+{% endblock %}

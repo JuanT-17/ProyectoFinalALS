@@ -1,0 +1,81 @@
+{% extends "admin/cabecera.html" %}
+{% block content %}
+<div id="Listado Coches">
+    <p>
+        {% if coche.nombre != ERROR %}
+    <h2>Datos del coche</h2>
+    <table>
+        <th>Nombre</th>
+        <th>Marca</th>
+        <th>Num Puertas</th>
+        <th>Caballos</th>
+        <th>Tipo combustible</th>
+        <th>Num Asientos</th>
+        <th>Eliminar</th>
+        <th>Editar</th>
+        <tr>
+            <td>
+                {{coche.nombre.capitalize()}}
+            </td>
+
+            <td>
+                {{coche.marca.capitalize()}}
+            </td>
+            <td style="text-align: center">
+                {{coche.num_puertas}}
+            </td>
+            <td style="text-align: center">
+                {{coche.caballos}}
+            </td>
+            <td>
+                {{coche.combustible.capitalize()}}
+            </td>
+            <td style="text-align: center">
+                {{coche.num_asientos}}
+            </td>
+            <td>
+                <a href="/admin/eliminarCoche?id_coche={{coche.key.urlsafe()}}">
+                    <button type="submit" style="width:100%;">Eliminar</button>
+                </a>
+            </td>
+            <td>
+                <a href="/admin/editarCoche?id_coche={{coche.key.urlsafe()}}">
+                    <button type="submit" style="width:100%;">Editar</button>
+                </a>
+            </td>
+        </tr>
+    </table>
+    <div id="comentarios-container">
+        <p></p>
+        <p></p>
+        <p></p>
+        {% if lista_comentarios.count() > 0 %}
+        <h3 style="color: white"> Listado Comentarios </h3>
+        <table>
+            <th>Nombre Usuario</th>
+            <th>Comentario</th>
+            <th>Fecha</th>
+            <th>Puntuacion</th>
+            {% for comentario in lista_comentarios %}
+            <tr>
+                <td>{{comentario.user_name}}</td>
+                <td>{{comentario.contenido}}</td>
+                <td>{{comentario.fecha}}</td>
+                <td>{{comentario.puntuacion}}</td>
+                <td>
+                    <a href="/admin/eliminarComentarioCoche?id_comentario={{comentario.key.urlsafe()}}">
+                        <button type="submit" style="width:100%;">Eliminar</button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+    {% else %}
+    <h1>ERROR INESPERADO, REFRESQUE LA PAGINA O TRATE DE VOLVER A INICIO</h1>
+    <h2>Disculpe las molestias</h2>
+    {% endif %}
+    </p>
+</div>
+{% endblock %}

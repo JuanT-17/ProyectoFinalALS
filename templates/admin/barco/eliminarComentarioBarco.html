@@ -1,0 +1,22 @@
+{% extends "admin/cabecera.html" %}
+{% block content %}
+<div id="seguro">
+    <form id="frmEliminarComentario" action="/admin/eliminarComentarioBarco" method="POST">
+            <p style="color: white; font-size: 30px">
+              ¿Está seguro de querer borrar el siguiente comentario perteneciente a {{comentario.user_name}}?
+            </p>
+            <input type="text" id="edSeguro" name="edSeguro" size="120"
+                   style="border:none;background-color: #A14813;color: white;font-size: 22px"
+                    value="{{comentario.contenido}}" readonly/>
+            <input type="text" id="edIdBarco" name="edIdBarco" value="{{comentario.id_vehiculo}}" hidden/>
+        <input type="text" id="edIdComentario" name="edIdComentario" value="{{comentario.key.urlsafe()}}" hidden/>
+        <p></p>
+        <p></p>
+            <input type="submit" style="background-color: #DB5000;color: white;width: 20%; height: 100%;" value="Por supuesto!!"/>
+            <a href="/admin/detalleBarco?id_barco={{comentario.id_vehiculo.urlsafe()}}">
+                <input type="button" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
+                       value="Cancelar"/>
+            </a>
+        </form>
+</div>
+{% endblock %}

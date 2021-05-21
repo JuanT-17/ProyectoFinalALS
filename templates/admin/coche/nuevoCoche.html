@@ -1,0 +1,146 @@
+{% extends "admin/cabecera.html" %}
+{% block content %}
+<style>
+    input {
+        width: 100%;
+        background-color: #ED874C;
+        color:white;
+        height: 25px;
+        font-size: 22px;
+    }
+
+    select {
+        width: 100%;
+        background-color: #ED874C;
+        color:white;
+        font-size: 22px;
+    }
+    label {
+        color: white;
+        font-size: 22px;
+    }
+
+    form {
+        background-color: #A14813;
+    }
+
+</style>
+<script>
+    function hideError()
+    {
+        document.getElementById( "dvError" ).style.display = "none";
+    }
+
+    function showError(msg)
+    {
+        var dvAnswer = document.getElementById("dvError");
+
+        dvAnswer.innerHTML = "ERROR: " + msg;
+        dvAnswer.style.display = "block";
+        dvAnswer.style.backgroundColor = "#FF1900";
+        dvAnswer.style.color = "white";
+        dvAnswer.style.fontSize = "14px";
+    }
+
+    function chk() {
+        var toret = true;
+        var form = document.getElementById("frmInput");
+
+        hideError();
+
+        //Preparar valores
+        var nombre = form["edNombre"].value.trim().toLowerCase();
+        var marca = form["edMarca"].value;
+        var num_puertas = form["edPuertas"].value;
+        var caballos = form["edCaballos"].value;
+        var combustible = form["edCombustible"].value;
+        var num_asientos = form["edNumAsientos"].value;
+
+        //Expresiones regulares
+        var expAlfabeticos = /^[a-z ]{2,50}$/;
+        var expNum = /^[0-9]{1,3}$/;
+
+        //Comprobar todos los valores
+        if ( nombre.length < 2 || nombre.length > 50 || !expAlfabeticos.test(nombre.toLowerCase()) ) {
+            toret = false;
+            showError( "El nombre debe ser de entre 2 y 50 letras y solo se permiten caracteres alfabeticos.");
+        }
+        if ( marca === "Volvo" || marca === "Saab" || marca === "Mercedes"
+            || marca === "Audi"){
+            toret = false;
+            showError("La marca tiene que corresponderse con alguna de las opciones dadas");
+        }
+        if ( num_puertas < 1 || num_puertas > 7 || !expNum.test(num_puertas) ) {
+            toret = false;
+            showError( "El numero de puertas debe ser un numero comprendido entre el 1 y el 7");
+        }
+        if ( caballos < 50 || caballos > 500 || !expNum.test(caballos) ) {
+            toret = false;
+            showError( "Los caballos del motor deben ser un numero comprendido entre el 50 y el 500");
+        }
+        if ( combustible === "Gasolina 95" || combustible === "Gasolina 98" || combustible === "Diesel"
+            || combustible === "Hibrido" || combustible === "Electrico" ){
+            toret = false;
+            showError("El tipo de combustible tiene que corresponderse con alguna de las opciones dadas");
+        }
+        if ( num_asientos < 1 || num_asientos > 70 || !expNum.test(num_asientos) ) {
+            toret = false;
+            showError( "Los numeros de asientos deben ser un numero comprendido entre el 1 y el 70");
+        }
+
+        return toret;
+    }
+</script>
+
+<form id="frmInput"
+      onsubmit="return chk();"
+      action="/admin/nuevoCoche"
+      method="post">
+    <h1>Insertar informacion del nuevo coche</h1>
+    <p>
+        <label for="edNombre">Nombre: </label>
+        <input type="text" id="edNombre" name="edNombre" required/>
+    </p>
+    <p>
+        <label for="edMarca">Marca: </label>
+        <select id="edMarca" name="edMarca" >
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="mercedes">Mercedes</option>
+            <option value="audi">Audi</option>
+        </select>
+    </p>
+    <p>
+        <label for="edPuertas">Numero puertas: </label>
+        <input type="number" id="edPuertas" name="edPuertas" step="1" min="1" max="7" required/>
+    </p>
+    <p>
+        <label for="edCaballos">Caballos motor: </label>
+        <input type="number" id="edCaballos" name="edCaballos" step="1" min="50" max="500" required/>
+    </p>
+    <p>
+        <label for="edCombustible">Tipo combustible: </label>
+        <select id="edCombustible" name="edCombustible" >
+            <option value="gasolina95">Gasolina 95</option>
+            <option value="gasolina98">Gasolina 98</option>
+            <option value="diesel">Diesel</option>
+            <option value="hibrido">Hibrido</option>
+            <option value="electrico">Electrico</option>
+        </select>
+    </p>
+    <p>
+        <label for="edNumAsientos">Num asientos: </label>
+        <input type="number" id="edNumAsientos" name="edNumAsientos" step="1" min="1" max="70" required/>
+    </p>
+    <p style="height: 100%;width: 100%">
+        <button style="width: 72%; font-size: 22px" type="submit">Guardar</button>
+        <a href="/admin/verCoches">
+            <input type="button" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
+                   value="Cancelar"/>
+        </a>
+    </p>
+</form>
+<div id="dvError">
+
+</div>
+{% endblock %}

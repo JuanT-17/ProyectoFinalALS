@@ -1,0 +1,26 @@
+{% extends "usuario/cabecera.html" %}
+{% block content %}
+<div id="Listado Barcos">
+    <p>
+        {% if lista_barcos.count() > 0 %}
+        <h2>Listado de barcos</h2>
+    <table>
+        <th>Nombre Vehículo</th>
+        <th>Ver en detalle</th>
+        {% for barco in lista_barcos %}
+        <tr>
+            <td>{{barco.nombre.capitalize()}}</td>
+            <td>
+                <a href="/comentarBarcos?id_barco={{barco.key.urlsafe()}}">
+                    <input type="submit" style="width: 100%; background-color: #DB5000;color: white;" value="Ver mas"/>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <h1>Actualmente no existen barcos en la Base de Datos</h1>
+    {% endif %}
+    </p>
+</div>
+{% endblock %}

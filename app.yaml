@@ -1,0 +1,91 @@
+application: proyectofinal
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+#Urls de bienvenida
+
+- url: /bienvenido
+  script: handlers.usuario.bienvenido.app
+
+- url: /admin/bienvenido
+  script: handlers.admin.bienvenido.app
+
+#Urls de usuario estándar para gestión de coches
+
+- url: /verCoches
+  script: handlers.usuario.coche.verCoches.app
+
+- url: /comentarCoches
+  script: handlers.usuario.coche.comentarCoches.app
+
+- url: /eliminarComentarioCoche
+  script: handlers.usuario.coche.eliminarComentarioCoche.app
+
+#Urls de usuario estándar para gestión de barcos
+
+- url: /verBarcos
+  script: handlers.usuario.barco.verBarcos.app
+
+- url: /comentarBarcos
+  script: handlers.usuario.barco.comentarBarcos.app
+
+- url: /eliminarComentarioBarco
+  script: handlers.usuario.barco.eliminarComentarioBarco.app
+
+#Urls de administrador para gestión de coches
+
+- url: /admin/verCoches
+  script: handlers.admin.coche.verCoches.app
+
+- url: /admin/detalleCoche
+  script: handlers.admin.coche.detalleCoche.app
+
+- url: /admin/nuevoCoche
+  script: handlers.admin.coche.nuevoCoche.app
+
+- url: /admin/editarCoche
+  script: handlers.admin.coche.editarCoche.app
+
+- url: /admin/eliminarCoche
+  script: handlers.admin.coche.eliminarCoche.app
+
+- url: /admin/eliminarComentarioCoche
+  script: handlers.admin.coche.eliminarComentarioCoche.app
+
+#Urls de administrador para gestión de barcos
+
+- url: /admin/verBarcos
+  script: handlers.admin.barco.verBarcos.app
+
+- url: /admin/detalleBarco
+  script: handlers.admin.barco.detalleBarco.app
+
+- url: /admin/nuevoBarco
+  script: handlers.admin.barco.nuevoBarco.app
+
+- url: /admin/editarBarco
+  script: handlers.admin.barco.editarBarco.app
+
+- url: /admin/eliminarBarco
+  script: handlers.admin.barco.eliminarBarco.app
+
+- url: /admin/eliminarComentarioBarco
+  script: handlers.admin.barco.eliminarComentarioBarco.app
+
+#Url genérica
+
+- url: .*
+  script: handlers.main.app
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+- name: jinja2
+  version: "latest"
