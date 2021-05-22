@@ -20,12 +20,8 @@ class MainHandler(webapp2.RequestHandler):
         user = users.get_current_user()
 
         if user:
-            if users.is_current_user_admin():
-                self.redirect("/admin/bienvenido")
-                return
-            else:
-                self.redirect("/bienvenido")
-                return
+            self.redirect("/bienvenido")
+            return
         else:
             access_link = users.create_login_url("/")
 

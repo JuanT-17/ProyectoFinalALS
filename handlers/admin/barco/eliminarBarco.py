@@ -6,7 +6,7 @@ from model.comentario import Comentario
 from model.barco import Barco
 
 
-class adminEliminarBarcoHandler(webapp2.RequestHandler):
+class eliminarBarcoHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -30,7 +30,7 @@ class adminEliminarBarcoHandler(webapp2.RequestHandler):
                         self.response.write(jinja.render_template("/admin/barco/eliminarBarco.html", **template_values))
                     except:
                         mensaje = "Error inesperado, disculpe las molestias"
-                        url = "/admin/verBarcos"
+                        url = "/verBarcos"
 
                         template_values = {
                             "mensaje": mensaje,
@@ -41,7 +41,7 @@ class adminEliminarBarcoHandler(webapp2.RequestHandler):
                         self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
                 else:
                     mensaje = "Error inesperado, disculpe las molestias"
-                    url = "/admin/verBarcos"
+                    url = "/verBarcos"
 
                     template_values = {
                         "mensaje": mensaje,
@@ -71,7 +71,7 @@ class adminEliminarBarcoHandler(webapp2.RequestHandler):
                         barco = ndb.Key(urlsafe=id_barco).get()
                         lista_comentarios = Comentario.query(Comentario.id_vehiculo == barco.key)
 
-                        url = "/admin/verBarcos"
+                        url = "/verBarcos"
                         mensaje = "El barco de nombre \""+barco.nombre+"\" y todos sus comentarios asociados "+"" \
                                   "han sido eliminados con exito"
                         barco.key.delete()
@@ -86,7 +86,7 @@ class adminEliminarBarcoHandler(webapp2.RequestHandler):
                         self.response.write(jinja.render_template("mensajeGenerico.html", **template_values))
                     except:
                         mensaje = "Error inesperado, disculpe las molestias"
-                        url = "/admin/verBarcos"
+                        url = "/verBarcos"
 
                         template_values = {
                             "mensaje": mensaje,
@@ -103,5 +103,5 @@ class adminEliminarBarcoHandler(webapp2.RequestHandler):
             return
 
 app = webapp2.WSGIApplication([
-    ('/admin/eliminarBarco', adminEliminarBarcoHandler),
+    ('/eliminarBarco', eliminarBarcoHandler),
 ], debug=True)

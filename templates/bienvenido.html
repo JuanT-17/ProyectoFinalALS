@@ -1,0 +1,10 @@
+{% extends "cabecera.html" %}
+{% block content %}
+<div id="Saludo bienvenida">
+  <p><h2 style="color: aliceblue">
+    Bienvenid@ {% if users.is_current_user_admin() %}
+    administrador
+    {% endif %}
+    , {{user_name}}</h2></p>
+</div>
+{% endblock %}

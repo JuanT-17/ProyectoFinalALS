@@ -6,45 +6,34 @@ from model.comentario import Comentario
 from model.coche import Coche
 
 
-class comentarCochesHandler(webapp2.RequestHandler):
+class detalleCocheHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
         if user:
-            if not users.is_current_user_admin():
+            try:
+                id_coche = self.request.GET["id_coche"]
+            except:
+                id_coche = "ERROR"
+
+            if id_coche != "ERROR":
                 try:
-                    id_coche = self.request.GET["id_coche"]
-                except:
-                    id_coche = "ERROR"
+                    coche = ndb.Key(urlsafe=id_coche).get()
+                    if coche:
+                        user_name = user.nickname()
+                        lista_comentarios = Comentario.query(Comentario.id_vehiculo == coche.key).order(
+                            -Comentario.fecha)
+                        template_values = {
+                            "user_name": user_name,
+                            "coche": coche,
+                            "lista_comentarios": lista_comentarios,
+                            "users" : users
+                        }
 
-                if id_coche != "ERROR":
-                    try:
-                        coche = ndb.Key(urlsafe=id_coche).get()
-                        if coche:
-                            user_name = user.nickname()
-                            lista_comentarios = Comentario.query(Comentario.id_vehiculo == coche.key).order(
-                                -Comentario.fecha)
-                            template_values = {
-                                "user_name": user_name,
-                                "coche": coche,
-                                "lista_comentarios": lista_comentarios
-                            }
-
-                            jinja = jinja2.get_jinja2(app=self.app)
-                            self.response.write(
-                                jinja.render_template("/usuario/coche/detalleCoche.html", **template_values))
-                        else:
-                            mensaje = "ERROR al acceder al vehiculo solicitado, disculpe las molestias"
-                            url = "/verCoches"
-
-                            template_values = {
-                                "mensaje": mensaje,
-                                "url": url
-                            }
-
-                            jinja = jinja2.get_jinja2(app=self.app)
-                            self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
-                    except:
+                        jinja = jinja2.get_jinja2(app=self.app)
+                        self.response.write(
+                            jinja.render_template("/coche/detalleCoche.html", **template_values))
+                    else:
                         mensaje = "ERROR al acceder al vehiculo solicitado, disculpe las molestias"
                         url = "/verCoches"
 
@@ -55,7 +44,7 @@ class comentarCochesHandler(webapp2.RequestHandler):
 
                         jinja = jinja2.get_jinja2(app=self.app)
                         self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
-                else:
+                except:
                     mensaje = "ERROR al acceder al vehiculo solicitado, disculpe las molestias"
                     url = "/verCoches"
 
@@ -67,8 +56,16 @@ class comentarCochesHandler(webapp2.RequestHandler):
                     jinja = jinja2.get_jinja2(app=self.app)
                     self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
             else:
-                self.redirect("/")
-                return
+                mensaje = "ERROR al acceder al vehiculo solicitado, disculpe las molestias"
+                url = "/verCoches"
+
+                template_values = {
+                    "mensaje": mensaje,
+                    "url": url
+                }
+
+                jinja = jinja2.get_jinja2(app=self.app)
+                self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
         else:
             self.redirect("/")
             return
@@ -97,7 +94,7 @@ class comentarCochesHandler(webapp2.RequestHandler):
                     comentario = Comentario(user_name=user.nickname(), contenido=contenidoComentario,
                                             id_vehiculo=coche.key, puntuacion = int(puntuacion))
                     comentario.put()
-                    url = "/comentarCoches?id_coche="+id_coche
+                    url = "/detalleCoche?id_coche="+id_coche
                     mensaje = "Su comentario para el coche '"+coche.nombre+"' ha sido guardado con exito"
                     template_values = {
                         "mensaje" : mensaje,
@@ -114,5 +111,5 @@ class comentarCochesHandler(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-    ('/comentarCoches', comentarCochesHandler),
+    ('/detalleCoche', detalleCocheHandler),
 ], debug=True)

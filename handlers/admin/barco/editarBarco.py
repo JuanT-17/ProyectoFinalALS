@@ -5,7 +5,7 @@ from google.appengine.ext import ndb
 from model.comentario import Comentario
 from model.coche import Coche
 
-class adminEditarBarcoHandler(webapp2.RequestHandler):
+class editarBarcoHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -28,7 +28,7 @@ class adminEditarBarcoHandler(webapp2.RequestHandler):
                             self.response.write(jinja.render_template("/admin/barco/editarBarco.html", **template_values))
                     except:
                         mensaje = "ERROR al acceder al vehiculo solicitado, disculpe las molestias"
-                        url = "/admin/verBarcos"
+                        url = "/verBarcos"
 
                         template_values = {
                             "mensaje": mensaje,
@@ -39,7 +39,7 @@ class adminEditarBarcoHandler(webapp2.RequestHandler):
                         self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
                 else:
                     mensaje = "ERROR al acceder al vehiculo solicitado, disculpe las molestias"
-                    url = "/admin/verBarcos"
+                    url = "/verBarcos"
 
                     template_values = {
                         "mensaje": mensaje,
@@ -76,7 +76,7 @@ class adminEditarBarcoHandler(webapp2.RequestHandler):
                         barco.put()
 
                         mensaje = "El barco con nombre \"" + barco.nombre.capitalize() + "\" ha sido editado con exito"
-                        url = "/admin/detalleBarco?id_barco="+id_barco
+                        url = "/detalleBarco?id_barco="+id_barco
 
                         template_values = {
                             "mensaje": mensaje,
@@ -87,7 +87,7 @@ class adminEditarBarcoHandler(webapp2.RequestHandler):
                         self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
                     except:
                         mensaje = "Error inesperado al recuperar datos del formulario"
-                        url = "/admin/verBarcos"
+                        url = "/verBarcos"
 
                         template_values = {
                             "mensaje": mensaje,
@@ -98,7 +98,7 @@ class adminEditarBarcoHandler(webapp2.RequestHandler):
                         self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
                 else:
                     mensaje = "Error inesperado al recuperar datos del formulario"
-                    url = "/admin/verBarcos"
+                    url = "/verBarcos"
 
                     template_values = {
                         "mensaje": mensaje,
@@ -118,5 +118,5 @@ class adminEditarBarcoHandler(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-    ('/admin/editarBarco', adminEditarBarcoHandler),
+    ('/editarBarco', editarBarcoHandler),
 ], debug=True)

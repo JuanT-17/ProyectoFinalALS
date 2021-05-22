@@ -6,45 +6,34 @@ from model.comentario import Comentario
 from model.barco import Barco
 
 
-class comentarBarcoHandler(webapp2.RequestHandler):
+class detalleBarcoHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
         if user:
-            if not users.is_current_user_admin():
+            try:
+                id_barco = self.request.GET["id_barco"]
+            except:
+                id_barco = "ERROR"
+
+            if id_barco != "ERROR":
                 try:
-                    id_barco = self.request.GET["id_barco"]
-                except:
-                    id_barco = "ERROR"
+                    barco = ndb.Key(urlsafe=id_barco).get()
+                    if barco:
+                        user_name = user.nickname()
+                        lista_comentarios = Comentario.query(Comentario.id_vehiculo == barco.key).order(
+                            -Comentario.fecha)
+                        template_values = {
+                            "user_name": user_name,
+                            "barco": barco,
+                            "lista_comentarios": lista_comentarios,
+                            "users": users
+                        }
 
-                if id_barco != "ERROR":
-                    try:
-                        barco = ndb.Key(urlsafe=id_barco).get()
-                        if barco:
-                            user_name = user.nickname()
-                            lista_comentarios = Comentario.query(Comentario.id_vehiculo == barco.key).order(
-                                -Comentario.fecha)
-                            template_values = {
-                                "user_name": user_name,
-                                "barco": barco,
-                                "lista_comentarios": lista_comentarios
-                            }
-
-                            jinja = jinja2.get_jinja2(app=self.app)
-                            self.response.write(
-                                jinja.render_template("/usuario/barco/detalleBarco.html", **template_values))
-                        else:
-                            mensaje = "ERROR al acceder al vehiculo solicitado, disculpe las molestias"
-                            url = "/verBarcos"
-
-                            template_values = {
-                                "mensaje": mensaje,
-                                "url": url
-                            }
-
-                            jinja = jinja2.get_jinja2(app=self.app)
-                            self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
-                    except:
+                        jinja = jinja2.get_jinja2(app=self.app)
+                        self.response.write(
+                            jinja.render_template("/barco/detalleBarco.html", **template_values))
+                    else:
                         mensaje = "ERROR al acceder al vehiculo solicitado, disculpe las molestias"
                         url = "/verBarcos"
 
@@ -55,7 +44,7 @@ class comentarBarcoHandler(webapp2.RequestHandler):
 
                         jinja = jinja2.get_jinja2(app=self.app)
                         self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
-                else:
+                except:
                     mensaje = "ERROR al acceder al vehiculo solicitado, disculpe las molestias"
                     url = "/verBarcos"
 
@@ -67,8 +56,16 @@ class comentarBarcoHandler(webapp2.RequestHandler):
                     jinja = jinja2.get_jinja2(app=self.app)
                     self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
             else:
-                self.redirect("/")
-                return
+                mensaje = "ERROR al acceder al vehiculo solicitado, disculpe las molestias"
+                url = "/verBarcos"
+
+                template_values = {
+                    "mensaje": mensaje,
+                    "url": url
+                }
+
+                jinja = jinja2.get_jinja2(app=self.app)
+                self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
         else:
             self.redirect("/")
             return
@@ -97,7 +94,7 @@ class comentarBarcoHandler(webapp2.RequestHandler):
                     comentario = Comentario(user_name=user.nickname(), contenido=contenidoComentario,
                                             id_vehiculo=barco.key, puntuacion = int(puntuacion))
                     comentario.put()
-                    url = "/comentarBarcos?id_barco=" + id_barco
+                    url = "/detalleBarco?id_barco=" + id_barco
                     mensaje = "Su comentario para el barco '" + barco.nombre + "' ha sido guardado con exito"
                     template_values = {
                         "mensaje": mensaje,
@@ -114,5 +111,5 @@ class comentarBarcoHandler(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-    ('/comentarBarcos', comentarBarcoHandler),
+    ('/detalleBarco', detalleBarcoHandler),
 ], debug=True)

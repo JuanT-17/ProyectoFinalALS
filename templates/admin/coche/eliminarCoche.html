@@ -1,7 +1,7 @@
-{% extends "admin/cabecera.html" %}
+{% extends "cabecera.html" %}
 {% block content %}
 <div id="seguro">
-    <form id="frmEliminarCoche" action="/admin/eliminarCoche" method="POST">
+    <form id="frmEliminarCoche" action="/eliminarCoche" method="POST">
         <p style="color: white; font-size: 30px">
             ¿Está seguro de querer borrar el siguiente coche?
             Recuerde que borrará todos los comentarios asociados al mismo.
@@ -40,7 +40,7 @@
         <p></p>
         <input type="submit" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
                value="Por supuesto!!"/>
-        <a href="/admin/detalleCoche?id_coche={{coche.key.urlsafe()}}">
+        <a href="/detalleCoche?id_coche={{coche.key.urlsafe()}}">
             <input type="button" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
                    value="Cancelar"/>
         </a>

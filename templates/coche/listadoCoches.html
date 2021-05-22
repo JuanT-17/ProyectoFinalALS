@@ -1,44 +1,50 @@
-{% extends "admin/cabecera.html" %}
+{% extends "cabecera.html" %}
 {% block content %}
 <div id="Listado Coches">
+    {% if users.is_current_user_admin() %}
     <p>
-        <a href="/admin/nuevoCoche">
+        <a href="/nuevoCoche">
             <button style="width: 25%;height: 50px; font-size: 20px;">
                 <b>Almacenar nuevo coche</b>
             </button>
         </a>
     </p>
+    {% endif %}
     <p>
-        <h2>Listado de coches</h2>
         {% if lista_coches.count() > 0 %}
+        <h2>Listado de coches</h2>
     <table>
         <th>Nombre Vehículo</th>
         <th>Ver en detalle</th>
-        <th>Eliminar</th>
-        <th>Editar</th>
+        {% if users.is_current_user_admin() %}
+            <th>Eliminar</th>
+            <th>Editar</th>
+        {% endif %}
         {% for coche in lista_coches %}
         <tr>
             <td>{{coche.nombre.capitalize()}}</td>
             <td>
-                <a href="/admin/detalleCoche?id_coche={{coche.key.urlsafe()}}">
+                <a href="/detalleCoche?id_coche={{coche.key.urlsafe()}}">
                     <input type="submit" style="width: 100%; background-color: #DB5000;color: white;" value="Ver mas"/>
                 </a>
             </td>
+        {% if users.is_current_user_admin() %}
             <td>
-                <a href="/admin/eliminarCoche?id_coche={{coche.key.urlsafe()}}">
+                <a href="/eliminarCoche?id_coche={{coche.key.urlsafe()}}">
                     <button type="submit" style="width:100%;">Eliminar</button>
                 </a>
             </td>
             <td>
-                <a href="/admin/editarCoche?id_coche={{coche.key.urlsafe()}}">
+                <a href="/editarCoche?id_coche={{coche.key.urlsafe()}}">
                     <button type="submit" style="width:100%;">Editar</button>
                 </a>
             </td>
+        {% endif %}
         </tr>
         {% endfor %}
     </table>
     {% else %}
-      <h1>Actualmente no existen coches en la Base de Datos</h1>
+    <h1>Actualmente no existen coches en la Base de Datos</h1>
     {% endif %}
     </p>
 </div>

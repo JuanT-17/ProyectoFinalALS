@@ -6,7 +6,7 @@ from model.comentario import Comentario
 from model.barco import Barco
 
 
-class adminNuevoBarcoHandler(webapp2.RequestHandler):
+class nuevoBarcoHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -43,7 +43,7 @@ class adminNuevoBarcoHandler(webapp2.RequestHandler):
 
                         mensaje = "El barco con nombre \"" + barcoNuevo.nombre.capitalize() + "\" ha sido almacenado" \
                                                                                               " con exito"
-                        url = "/admin/verBarcos"
+                        url = "/verBarcos"
 
                         template_values = {
                             "mensaje": mensaje,
@@ -54,7 +54,7 @@ class adminNuevoBarcoHandler(webapp2.RequestHandler):
                         self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
                     except:
                         mensaje = "ERROR al recuperar datos del formulario, disculpe las molestias"
-                        url = "/admin/verBarcos"
+                        url = "/verBarcos"
 
                         template_values = {
                             "mensaje": mensaje,
@@ -65,7 +65,7 @@ class adminNuevoBarcoHandler(webapp2.RequestHandler):
                         self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
                 else:
                     mensaje = "Error inesperado al recuperar datos del formulario"
-                    url = "/admin/verBarcos"
+                    url = "/verBarcos"
 
                     template_values = {
                         "mensaje": mensaje,
@@ -85,5 +85,5 @@ class adminNuevoBarcoHandler(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-    ('/admin/nuevoBarco', adminNuevoBarcoHandler),
+    ('/nuevoBarco', nuevoBarcoHandler),
 ], debug=True)

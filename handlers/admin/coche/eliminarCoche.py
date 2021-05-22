@@ -6,7 +6,7 @@ from model.comentario import Comentario
 from model.coche import Coche
 
 
-class adminEliminarCocheHandler(webapp2.RequestHandler):
+class eliminarCocheHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -29,7 +29,7 @@ class adminEliminarCocheHandler(webapp2.RequestHandler):
                     self.response.write(jinja.render_template("/admin/coche/eliminarCoche.html", **template_values))
                 except:
                     mensaje = "Error inesperado, disculpe las molestias"
-                    url = "/admin/verCoches"
+                    url = "/verCoches"
 
                     template_values = {
                         "mensaje": mensaje,
@@ -58,7 +58,7 @@ class adminEliminarCocheHandler(webapp2.RequestHandler):
                     coche = ndb.Key(urlsafe=id_coche).get()
                     lista_comentarios = Comentario.query(Comentario.id_vehiculo == coche.key)
 
-                    url = "/admin/verCoches"
+                    url = "/verCoches"
                     mensaje = "El coche de nombre \""+coche.nombre+"\" y todos sus comentarios asociados "+"" \
                               "han sido eliminados con exito"
                     coche.key.delete()
@@ -79,5 +79,5 @@ class adminEliminarCocheHandler(webapp2.RequestHandler):
             return
 
 app = webapp2.WSGIApplication([
-    ('/admin/eliminarCoche', adminEliminarCocheHandler),
+    ('/eliminarCoche', eliminarCocheHandler),
 ], debug=True)

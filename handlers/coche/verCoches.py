@@ -12,18 +12,15 @@ class verCochesHandler(webapp2.RequestHandler):
 
         lista_coches = Coche.query()
         if user:
-            if not users.is_current_user_admin():
-                user_name = user.nickname()
-                template_values = {
-                    "user_name": user_name,
-                    "lista_coches": lista_coches
-                }
+            user_name = user.nickname()
+            template_values = {
+                "user_name": user_name,
+                "lista_coches": lista_coches,
+                "users" : users
+            }
 
-                jinja = jinja2.get_jinja2(app=self.app)
-                self.response.write(jinja.render_template("/usuario/coche/listadoCoches.html", **template_values))
-            else:
-                self.redirect("/")
-                return
+            jinja = jinja2.get_jinja2(app=self.app)
+            self.response.write(jinja.render_template("/coche/listadoCoches.html", **template_values))
         else:
             self.redirect("/")
             return

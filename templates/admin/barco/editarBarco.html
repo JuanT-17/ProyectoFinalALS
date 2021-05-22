@@ -1,4 +1,4 @@
-{% extends "admin/cabecera.html" %}
+{% extends "cabecera.html" %}
 {% block content %}
 <style>
     input {
@@ -83,12 +83,12 @@
 
 <form id="frmInput"
       onsubmit="return chk();"
-      action="/admin/editarBarco"
+      action="/editarBarco"
       method="post">
     <h1>Insertar informacion del nuevo barco</h1>
     <p>
         <label for="edNombre">Nombre: </label>
-        <input type="text" id="edNombre" name="edNombre" value="{{barco.nombre}}" required/>
+        <input type="text" id="edNombre" name="edNombre" value="{{barco.nombre.capitalize()}}" required/>
     </p>
     <p>
       <label for="edEslora">Eslora en metros: </label>
@@ -113,7 +113,7 @@
   </p>
     <p style="height: 100%;width: 100%">
         <button style="width: 72%; font-size: 22px" type="submit">Guardar</button>
-        <a href="/admin/verBarcos">
+        <a href="/verBarcos">
             <input type="button" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
                    value="Cancelar"/>
         </a>

@@ -5,7 +5,7 @@ from google.appengine.ext import ndb
 from model.comentario import Comentario
 from model.coche import Coche
 
-class adminEditarCocheHandler(webapp2.RequestHandler):
+class editarCocheHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -27,7 +27,7 @@ class adminEditarCocheHandler(webapp2.RequestHandler):
                         self.response.write(jinja.render_template("/admin/coche/editarCoche.html", **template_values))
                 except:
                     mensaje = "ERROR al acceder al vehiculo solicitado, disculpe las molestias"
-                    url = "/admin/verCoches"
+                    url = "/verCoches"
 
                     template_values = {
                         "mensaje": mensaje,
@@ -69,7 +69,7 @@ class adminEditarCocheHandler(webapp2.RequestHandler):
                         coche.put()
 
                         mensaje = "El coche con nombre \"" + coche.nombre.capitalize() + "\" ha sido editado con exito"
-                        url = "/admin/detalleCoche?id_coche="+id_coche
+                        url = "/detalleCoche?id_coche="+id_coche
 
                         template_values = {
                             "mensaje": mensaje,
@@ -80,7 +80,7 @@ class adminEditarCocheHandler(webapp2.RequestHandler):
                         self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
                     except:
                         mensaje = "Error inesperado al recuperar datos del formulario"
-                        url = "/admin/verCoches"
+                        url = "/verCoches"
 
                         template_values = {
                             "mensaje": mensaje,
@@ -91,7 +91,7 @@ class adminEditarCocheHandler(webapp2.RequestHandler):
                         self.response.write(jinja.render_template("/mensajeGenerico.html", **template_values))
                 else:
                     mensaje = "Error inesperado al recuperar datos del formulario"
-                    url = "/admin/verCoches"
+                    url = "/verCoches"
 
                     template_values = {
                         "mensaje": mensaje,
@@ -111,5 +111,5 @@ class adminEditarCocheHandler(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-    ('/admin/editarCoche', adminEditarCocheHandler),
+    ('/editarCoche', editarCocheHandler),
 ], debug=True)

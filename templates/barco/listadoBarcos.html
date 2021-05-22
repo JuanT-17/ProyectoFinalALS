@@ -1,0 +1,51 @@
+{% extends "cabecera.html" %}
+{% block content %}
+<div id="Listado Barcos">
+    <p>
+        {% if users.is_current_user_admin() %}
+            <p>
+                <a href="/nuevoBarco">
+                    <button style="width: 25%;height: 50px; font-size: 20px;">
+                        <b>Almacenar nuevo barco</b>
+                    </button>
+                </a>
+            </p>
+        {% endif %}
+        {% if lista_barcos.count() > 0 %}
+        <h2>Listado de barcos</h2>
+    <table>
+        <th>Nombre Vehículo</th>
+        <th>Ver en detalle</th>
+        {% if users.is_current_user_admin() %}
+            <th>Eliminar</th>
+            <th>Editar</th>
+        {% endif %}
+        {% for barco in lista_barcos %}
+        <tr>
+            <td>{{barco.nombre.capitalize()}}</td>
+            <td>
+                <a href="/detalleBarco?id_barco={{barco.key.urlsafe()}}">
+                    <input type="submit" style="width: 100%; background-color: #DB5000;color: white;" value="Ver mas"/>
+                </a>
+            </td>
+            {% if users.is_current_user_admin() %}
+                <td>
+                    <a href="/eliminarBarco?id_barco={{ barco.key.urlsafe() }}">
+                        <button type="submit" style="width:100%;">Eliminar</button>
+                    </a>
+                </td>
+                <td>
+                    <a href="/editarBarco?id_barco={{ barco.key.urlsafe() }}">
+                        <button type="submit" style="width:100%;">Editar</button>
+                    </a>
+                </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <h1>Actualmente no existen barcos en la Base de Datos</h1>
+    {% endif %}
+    </p>
+</div>
+{% endblock %}

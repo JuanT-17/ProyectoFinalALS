@@ -1,4 +1,4 @@
-{% extends "usuario/cabecera.html" %}
+{% extends "cabecera.html" %}
 {% block content %}
 <div id="Listado Barcos">
     <p>
@@ -9,6 +9,10 @@
         <th>Eslora en metros</th>
         <th>Tipo de embarcacion</th>
         <th>Pasajeros maximos</th>
+        {% if users.is_current_user_admin() %}
+            <th>Eliminar</th>
+            <th>Editar</th>
+        {% endif %}
         <tr>
             <td>
                 {{barco.nombre.capitalize()}}
@@ -23,30 +27,47 @@
             <td style="text-align: center">
                 {{barco.num_pasajeros}}
             </td>
+            {% if users.is_current_user_admin() %}
+                <td>
+                    <a href="/eliminarBarco?id_barco={{ barco.key.urlsafe() }}">
+                        <button type="submit" style="width:100%;">Eliminar</button>
+                    </a>
+                </td>
+                <td>
+                    <a href="/editarBarco?id_barco={{ barco.key.urlsafe() }}">
+                        <button type="submit" style="width:100%;">Editar</button>
+                    </a>
+                </td>
+            {% endif %}
         </tr>
     </table>
     <div id="comentarios-container">
         <p></p>
         <p></p>
         <p></p>
-        <form id="frmNuevoComentario" onsubmit="return chk()" action="/comentarBarcos" method="POST">
-            <p>
-            <label for="edComentario" style="color: white; font-size: 30px; width: 20%"> Comentario </label>
-            </p>
-            <p>
-            <input type="text" id="edComentario" name="edComentario" size="120"
-                   style="border:none;background-color: #A14813;color: white;font-size: 18px; width: 60%" required/>
-            </p>
-            <p>
-            <label for="edPuntuacion" style="color: white; font-size: 15px; width: 20%"> Nota del 1 al 10 </label>
-            <input type="number" id="edPuntuacion" name="edPuntuacion"
-                   style="border:none;background-color: #A14813;color: white;font-size: 18px; width: 60%"
-                   step="1" min="1" max="10" required/>
-            </p>
-            <input type="text" id="edIdBarco" name="edIdBarco" value="{{barco.key.urlsafe()}}" hidden/>
-            <input type="submit" style="background-color: #DB5000;color: white;width: 20%; height: 100%;" value="Publicar!!"/>
-        </form>
-        <div id="dvError"></div>
+        {% if not users.is_current_user_admin() %}
+            <form id="frmNuevoComentario" onsubmit="return chk()" action="/detalleBarco" method="POST">
+                <p>
+                    <label for="edComentario" style="color: white; font-size: 30px; width: 20%"> Comentario </label>
+                </p>
+                <p>
+                    <input type="text" id="edComentario" name="edComentario" size="120"
+                           style="border:none;background-color: #A14813;color: white;font-size: 18px; width: 60%"
+                           required/>
+                </p>
+                <p>
+                    <label for="edPuntuacion" style="color: white; font-size: 15px; width: 20%"> Nota del 1 al
+                        10 </label>
+                    <input type="number" id="edPuntuacion" name="edPuntuacion"
+                           style="border:none;background-color: #A14813;color: white;font-size: 18px; width: 60%"
+                           step="1" min="1" max="10" required/>
+                </p>
+                <input type="text" id="edIdBarco" name="edIdBarco" value="{{ barco.key.urlsafe() }}" hidden/>
+                <input type="submit" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
+                       value="Publicar!!"/>
+            </form>
+            <div id="dvError"></div>
+        {% endif %}
         {% if lista_comentarios.count() > 0 %}
         <p></p>
         <p></p>
@@ -63,7 +84,7 @@
                 <td>{{comentario.contenido}}</td>
                 <td>{{comentario.fecha}}</td>
                 <td>{{comentario.puntuacion}}</td>
-                {% if comentario.user_name == user_name %}
+                {% if comentario.user_name == user_name or users.is_current_user_admin() %}
                 <td>
                     <a href="eliminarComentarioBarco?id_comentario={{comentario.key.urlsafe()}}">
                         <button type="submit" style="width:100%;">Eliminar</button>

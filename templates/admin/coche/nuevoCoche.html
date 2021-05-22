@@ -1,4 +1,4 @@
-{% extends "admin/cabecera.html" %}
+{% extends "cabecera.html" %}
 {% block content %}
 <style>
     input {
@@ -94,7 +94,7 @@
 
 <form id="frmInput"
       onsubmit="return chk();"
-      action="/admin/nuevoCoche"
+      action="/nuevoCoche"
       method="post">
     <h1>Insertar informacion del nuevo coche</h1>
     <p>
@@ -134,7 +134,7 @@
     </p>
     <p style="height: 100%;width: 100%">
         <button style="width: 72%; font-size: 22px" type="submit">Guardar</button>
-        <a href="/admin/verCoches">
+        <a href="/verCoches">
             <input type="button" style="background-color: #DB5000;color: white;width: 20%; height: 100%;"
                    value="Cancelar"/>
         </a>
